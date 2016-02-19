@@ -33,6 +33,7 @@ proguard/
 .idea/tasks.xml
 .idea/workspace.xml
 .gradle
+/build
 /*/local.properties
 /*/out
 /*/*/build
