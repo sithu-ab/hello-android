@@ -19,9 +19,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DisplayMessageActivity"
+            android:name="com.aluto_benli.helloandroid.DisplayMessageActivity"
             android:label="@string/title_activity_display_message"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName="com.aluto_benli.helloandroid.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.aluto_benli.helloandroid.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
