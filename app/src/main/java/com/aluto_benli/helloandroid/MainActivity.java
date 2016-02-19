@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
-
     public final static String EXTRA_MESSAGE = "com.aluto_benli.helloandroid.MESSAGE";
 
     @Override
