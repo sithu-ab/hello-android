@@ -1,5 +1,7 @@
 package com.aluto_benli.helloandroid;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,6 +42,13 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.content);
         layout.addView(textView);
+
+        // Write to Shared Preferences
+        Context context = getBaseContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.user_input), message);
+        editor.commit();
     }
 
     @Override
