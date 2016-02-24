@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_MESSAGE = "com.aluto_benli.helloandroid.MESSAGE";
@@ -34,8 +35,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Reading from Shared Preferences and set the last value to EditText
         SharedPreferences sharedPref = getBaseContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        editText.setText(sharedPref.getString(getString(R.string.user_input), " "));
+        String message = sharedPref.getString(getString(R.string.user_input), "");
+
+        if (!message.isEmpty()) {
+            // Display the last input value only when it was previously entered
+            TextView historyValue = (TextView) findViewById(R.id.input_history_value);
+            historyValue.setText(message);
+            historyValue.setVisibility(TextView.VISIBLE);
+
+            TextView historyLabel = (TextView) findViewById(R.id.input_history_label);
+            historyLabel.setVisibility(TextView.VISIBLE);
+        }
     }
 
     @Override
