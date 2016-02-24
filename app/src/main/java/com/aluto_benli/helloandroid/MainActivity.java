@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -22,9 +21,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+    protected static String LOG_TAG = MainActivity.class.getName();
     public final static String EXTRA_MESSAGE = "com.aluto_benli.helloandroid.MESSAGE";
-    private static final String LOG_TAG = MainActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         String message = sharedPref.getString(getString(R.string.user_input), "");
         */
 
+        /*
         // Reading data from the File saved on Internal Storage
         Context context = getBaseContext();
         String fileName = context.getFilesDir() + File.separator + "data.txt";
@@ -73,6 +73,37 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(context, "File does not exist.", Toast.LENGTH_SHORT).show();
         }
+        */
+
+        // Reading data from the File saved on External Storage
+        Context context = getBaseContext();
+        String message  = "";
+
+        File file = this.getExternalStorage(context);
+        if (file.exists()) {
+            if (this.isExternalStorageReadable()) {
+                try {
+                    FileInputStream inputStream = new FileInputStream(file);
+                    InputStreamReader streamReader = new InputStreamReader(inputStream);
+                    BufferedReader bufferedReader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    message = sb.toString();
+                    streamReader.close();
+                    inputStream.close();
+                } catch (IOException e) {
+                    Log.i(LOG_TAG, e.getMessage());
+                }
+
+            } else {
+                Toast.makeText(context, "External storage not readable.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, "File does not exist.", Toast.LENGTH_SHORT).show();
+        }
 
         if (!message.isEmpty()) {
             // Display the last input value only when it was previously entered
@@ -84,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             historyLabel.setVisibility(TextView.VISIBLE);
 
             // Show short alert message
-            Toast.makeText(context, "Read from internal storage", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Read from external storage", Toast.LENGTH_SHORT).show();
             Toast.makeText(context, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
         }
     }

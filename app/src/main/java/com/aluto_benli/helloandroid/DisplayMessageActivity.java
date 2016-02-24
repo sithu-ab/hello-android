@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,8 +18,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
-public class DisplayMessageActivity extends AppCompatActivity {
-    private static final String LOG_TAG = DisplayMessageActivity.class.getName();
+public class DisplayMessageActivity extends BaseActivity {
+    protected static String LOG_TAG = DisplayMessageActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +59,10 @@ public class DisplayMessageActivity extends AppCompatActivity {
             editor.commit();
             */
 
+            /*
             // Save a File on Internal Storage
             Context context = getBaseContext();
             File file = new File(context.getFilesDir(), "data.txt");
-
             FileOutputStream stream = new FileOutputStream(file);
             PrintWriter writer = new PrintWriter(stream);
             writer.println(message);
@@ -72,8 +71,28 @@ public class DisplayMessageActivity extends AppCompatActivity {
             stream.close();
 
             // Show alerts
-            Toast.makeText(getBaseContext(), "Your message is saved on internal storage.", Toast.LENGTH_SHORT).show();
-            Toast.makeText(getBaseContext(), file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Your message is saved on internal storage.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+            */
+
+            // Save a File on External Storage
+            Context context = getBaseContext();
+            File file = this.getExternalStorage(context);
+            if (this.isExternalStorageWritable()) {
+                FileOutputStream stream = new FileOutputStream(file);
+                PrintWriter writer = new PrintWriter(stream);
+                writer.println(message);
+                writer.flush();
+                writer.close();
+                stream.close();
+
+                // Show alerts
+                Toast.makeText(context, "Your message is saved on external storage.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(context, "External storage not writable.", Toast.LENGTH_SHORT).show();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG_TAG, e.getMessage());
