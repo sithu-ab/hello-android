@@ -1,7 +1,7 @@
 package com.aluto_benli.helloandroid;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+//import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +13,11 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 public class DisplayMessageActivity extends AppCompatActivity {
     private static final String LOG_TAG = DisplayMessageActivity.class.getName();
@@ -47,11 +52,28 @@ public class DisplayMessageActivity extends AppCompatActivity {
         layout.addView(textView);
 
         try {
+            /*
             // Write to Shared Preferences
             SharedPreferences sharedPref = getBaseContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(getString(R.string.user_input), message);
             editor.commit();
+            */
+
+            // Save a File on Internal Storage
+            Context context = getBaseContext();
+            File file = new File(context.getFilesDir(), "data.txt");
+
+            FileOutputStream stream = new FileOutputStream(file);
+            PrintWriter writer = new PrintWriter(stream);
+            writer.println(message);
+            writer.flush();
+            writer.close();
+            stream.close();
+
+            // Show alerts
+            Toast.makeText(getBaseContext(), "Your message is saved on internal storage.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), file.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(LOG_TAG, e.getMessage());
