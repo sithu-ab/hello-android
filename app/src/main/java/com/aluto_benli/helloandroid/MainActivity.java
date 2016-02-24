@@ -1,5 +1,7 @@
 package com.aluto_benli.helloandroid;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -29,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        // Reading from Shared Preferences and set the last value to EditText
+        SharedPreferences sharedPref = getBaseContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        EditText editText = (EditText) findViewById(R.id.edit_message);
+        editText.setText(sharedPref.getString(getString(R.string.user_input), " "));
     }
 
     @Override
