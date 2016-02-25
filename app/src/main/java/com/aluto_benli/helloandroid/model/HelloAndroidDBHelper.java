@@ -109,11 +109,18 @@ public class HelloAndroidDBHelper extends SQLiteOpenHelper {
      * Read all records from the history table
      * @return
      */
-    public ArrayList<String> getHistories(Integer...limit){
+    public ArrayList<History> getHistories(Integer...limit){
         // Gets the database in the current database helper in read-only mode
         SQLiteDatabase db = getReadableDatabase();
-        ArrayList<String> histories = new ArrayList<String>();
+        ArrayList<History> histories = new ArrayList<History>();
 
+        // Define the columns from the database
+        // you will actually use after this query.
+        String[] columns = {
+                HistoryContract.HistoryEntry._ID,
+                HistoryContract.HistoryEntry.COLUMN_NAME_MESSAGE,
+                HistoryContract.HistoryEntry.COLUMN_NAME_CREATED
+        };
         // How you want the results sorted in the resulting Cursor
         String sortOrder = HistoryContract.HistoryEntry.COLUMN_NAME_CREATED + " DESC";
         // LIMIT clause for query (optional parameter)
@@ -123,7 +130,7 @@ public class HelloAndroidDBHelper extends SQLiteOpenHelper {
         // returned by the request
         Cursor c = db.query(
                 HistoryContract.TABLE_NAME, // table name
-                new String[] { HistoryContract.HistoryEntry.COLUMN_NAME_MESSAGE }, // columns to be fetched
+                columns, // columns to be fetched; null for all columns
                 null, // where condition
                 null, // argument values for where condition
                 null, // group by
@@ -132,7 +139,11 @@ public class HelloAndroidDBHelper extends SQLiteOpenHelper {
                 maxResults // limit
         );
         while (c.moveToNext()) {
-            histories.add(c.getString(c.getColumnIndex(HistoryContract.HistoryEntry.COLUMN_NAME_MESSAGE)));
+            History history = new History();
+            history.setId(c.getLong(c.getColumnIndex(HistoryContract.HistoryEntry._ID)));
+            history.setMessage(c.getString(c.getColumnIndex(HistoryContract.HistoryEntry.COLUMN_NAME_MESSAGE)));
+            history.setCreated(c.getLong(c.getColumnIndex(HistoryContract.HistoryEntry.COLUMN_NAME_CREATED)));
+            histories.add(history);
         }
         c.close();
         return histories;

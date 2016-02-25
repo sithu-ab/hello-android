@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aluto_benli.helloandroid.model.HelloAndroidDBHelper;
+import com.aluto_benli.helloandroid.model.History;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -114,10 +115,10 @@ public class MainActivity extends BaseActivity {
         Context context = getBaseContext();
         String message  = "";
         HelloAndroidDBHelper db = new HelloAndroidDBHelper(context);
-        ArrayList<String> results = db.getHistories();
+        ArrayList<History> results = db.getHistories();
         if (results.size() > 0) {
-            for (String msg : results) {
-                message = message + msg + "\n";
+            for (History history : results) {
+                message = message + history.getMessage() + "\n";
             }
         }
 
