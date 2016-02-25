@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity {
         Context context = getBaseContext();
         String message  = "";
         HelloAndroidDBHelper db = new HelloAndroidDBHelper(context);
-        ArrayList<History> results = db.getHistories();
+        ArrayList<History> results = db.getHistories(10); // Get latest 10 history records only
         if (results.size() > 0) {
             for (History history : results) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
