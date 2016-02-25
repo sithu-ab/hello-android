@@ -148,4 +148,19 @@ public class HelloAndroidDBHelper extends SQLiteOpenHelper {
         c.close();
         return histories;
     }
+
+    /**
+     * Get all total count of histories
+     * @return
+     */
+    public Integer getTotalHistories() {
+        // Gets the database in the current database helper in read-only mode
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.rawQuery("SELECT COUNT(*) FROM " + HistoryContract.TABLE_NAME, null);
+        c.moveToFirst();
+        Integer count = c.getInt(0);
+        c.close();
+        return count;
+    }
 }

@@ -119,7 +119,8 @@ public class MainActivity extends BaseActivity {
         String message  = "";
         HelloAndroidDBHelper db = new HelloAndroidDBHelper(context);
         ArrayList<History> results = db.getHistories(10); // Get latest 10 history records only
-        if (results.size() > 0) {
+        Integer displayCount = results.size();
+        if (displayCount > 0) {
             for (History history : results) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 message = message + dateFormat.format(new Date(history.getCreated())) + " ";
@@ -138,6 +139,9 @@ public class MainActivity extends BaseActivity {
 
             // Show short alert message
             Toast.makeText(context, "Read from SQLite db", Toast.LENGTH_SHORT).show();
+
+            Integer total = db.getTotalHistories();
+            Toast.makeText(context, "Showing " + displayCount.toString() + " out of " + total.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
