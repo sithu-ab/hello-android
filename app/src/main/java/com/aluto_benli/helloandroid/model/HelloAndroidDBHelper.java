@@ -109,10 +109,10 @@ public class HelloAndroidDBHelper extends SQLiteOpenHelper {
      * Read all records from the history table
      * @return
      */
-    public ArrayList getHistories(Integer...limit){
+    public ArrayList<String> getHistories(Integer...limit){
         // Gets the database in the current database helper in read-only mode
         SQLiteDatabase db = getReadableDatabase();
-        ArrayList histories = new ArrayList();
+        ArrayList<String> histories = new ArrayList<String>();
 
         // How you want the results sorted in the resulting Cursor
         String sortOrder = HistoryContract.HistoryEntry.COLUMN_NAME_CREATED + " DESC";

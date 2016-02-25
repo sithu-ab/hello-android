@@ -114,9 +114,11 @@ public class MainActivity extends BaseActivity {
         Context context = getBaseContext();
         String message  = "";
         HelloAndroidDBHelper db = new HelloAndroidDBHelper(context);
-        ArrayList results = db.getHistories();
+        ArrayList<String> results = db.getHistories();
         if (results.size() > 0) {
-            message = results.get(0).toString();
+            for (String msg : results) {
+                message = message + msg + "\n";
+            }
         }
 
         if (!message.isEmpty()) {
