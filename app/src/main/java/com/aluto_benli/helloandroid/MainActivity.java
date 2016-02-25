@@ -23,7 +23,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
     protected static String LOG_TAG = MainActivity.class.getName();
@@ -118,6 +121,8 @@ public class MainActivity extends BaseActivity {
         ArrayList<History> results = db.getHistories();
         if (results.size() > 0) {
             for (History history : results) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                message = message + dateFormat.format(new Date(history.getCreated())) + " ";
                 message = message + history.getMessage() + "\n";
             }
         }

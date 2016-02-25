@@ -96,7 +96,7 @@ public class HelloAndroidDBHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(HistoryContract.HistoryEntry.COLUMN_NAME_MESSAGE, entry);
-        values.put(HistoryContract.HistoryEntry.COLUMN_NAME_CREATED, System.currentTimeMillis()/1000);
+        values.put(HistoryContract.HistoryEntry.COLUMN_NAME_CREATED, System.currentTimeMillis());
 
         // Insert the new row, returning the primary key value of the new row
         long historyId;
