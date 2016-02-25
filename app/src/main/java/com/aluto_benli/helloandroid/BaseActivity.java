@@ -1,6 +1,8 @@
 package com.aluto_benli.helloandroid;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,5 +35,22 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         return new File(dir, "data.txt");
+    }
+
+    /**
+     * Display a simple alert dialog
+     * @param message The message to show
+     */
+    public void showAlert(String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        alertDialog.show();
     }
 }

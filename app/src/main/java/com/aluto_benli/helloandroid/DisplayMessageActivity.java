@@ -14,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aluto_benli.helloandroid.model.HelloAndroidDBHelper;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -52,7 +54,7 @@ public class DisplayMessageActivity extends BaseActivity {
 
         try {
             /*
-            // Write to Shared Preferences
+            // Method 1: Write to Shared Preferences
             SharedPreferences sharedPref = getBaseContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(getString(R.string.user_input), message);
@@ -60,7 +62,7 @@ public class DisplayMessageActivity extends BaseActivity {
             */
 
             /*
-            // Save a File on Internal Storage
+            // Method 2: Save a File on Internal Storage
             Context context = getBaseContext();
             File file = new File(context.getFilesDir(), "data.txt");
             FileOutputStream stream = new FileOutputStream(file);
@@ -75,7 +77,8 @@ public class DisplayMessageActivity extends BaseActivity {
             Toast.makeText(context, file.getAbsolutePath(), Toast.LENGTH_LONG).show();
             */
 
-            // Save a File on External Storage
+            /*
+            // Method 3: Save a File on External Storage
             Context context = getBaseContext();
             File file = this.getExternalStorage(context);
             if (this.isExternalStorageWritable()) {
@@ -92,10 +95,21 @@ public class DisplayMessageActivity extends BaseActivity {
             } else {
                 Toast.makeText(context, "External storage not writable.", Toast.LENGTH_SHORT).show();
             }
+            */
 
+            // Method 4: Save data in SQL database
+            Context context = getBaseContext();
+            HelloAndroidDBHelper db = new HelloAndroidDBHelper(context);
+            long insertedId = db.insertHistory(message);
+            if (insertedId != -1) {
+                // Show alerts
+                Toast.makeText(context, "Saved in SQLite db.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Failed to save in db.", Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            Log.i(LOG_TAG, e.getMessage());
+            Log.e(LOG_TAG, e.getMessage());
+            showAlert(e.getMessage());
         }
     }
 

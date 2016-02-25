@@ -15,11 +15,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aluto_benli.helloandroid.model.HelloAndroidDBHelper;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
     protected static String LOG_TAG = MainActivity.class.getName();
@@ -42,13 +45,13 @@ public class MainActivity extends BaseActivity {
         });
 
         /*
-        // Reading from Shared Preferences and set the last value to EditText
+        // Method 1: Reading from Shared Preferences and set the last value to EditText
         SharedPreferences sharedPref = getBaseContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String message = sharedPref.getString(getString(R.string.user_input), "");
         */
 
         /*
-        // Reading data from the File saved on Internal Storage
+        // Method 2: Reading data from the File saved on Internal Storage
         Context context = getBaseContext();
         String fileName = context.getFilesDir() + File.separator + "data.txt";
         String message  = "";
@@ -75,7 +78,8 @@ public class MainActivity extends BaseActivity {
         }
         */
 
-        // Reading data from the File saved on External Storage
+        /*
+        // Method 3: Reading data from the File saved on External Storage
         Context context = getBaseContext();
         String message  = "";
 
@@ -104,6 +108,16 @@ public class MainActivity extends BaseActivity {
         } else {
             Toast.makeText(context, "File does not exist.", Toast.LENGTH_SHORT).show();
         }
+        */
+
+        // Method 4: Reading data from SQLite database
+        Context context = getBaseContext();
+        String message  = "";
+        HelloAndroidDBHelper db = new HelloAndroidDBHelper(context);
+        ArrayList results = db.getHistories();
+        if (results.size() > 0) {
+            message = results.get(0).toString();
+        }
 
         if (!message.isEmpty()) {
             // Display the last input value only when it was previously entered
@@ -115,8 +129,7 @@ public class MainActivity extends BaseActivity {
             historyLabel.setVisibility(TextView.VISIBLE);
 
             // Show short alert message
-            Toast.makeText(context, "Read from external storage", Toast.LENGTH_SHORT).show();
-            Toast.makeText(context, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Read from SQLite db", Toast.LENGTH_SHORT).show();
         }
     }
 
