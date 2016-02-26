@@ -11,12 +11,16 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aluto_benli.helloandroid.model.HelloAndroidDBHelper;
 import com.aluto_benli.helloandroid.model.History;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,11 +30,15 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
     protected static String LOG_TAG = MainActivity.class.getName();
     public final static String EXTRA_MESSAGE = "com.aluto_benli.helloandroid.MESSAGE";
+
+    @NotEmpty(message = "Please type something.")
+    private EditText fieldEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +53,21 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        fieldEditText = (EditText) findViewById(R.id.edit_message);
+
+        // Instantiate a new Validator
+        final Validator validator = new Validator(this);
+        validator.setValidationListener(this);
+
+        // Validate on button onclick
+        Button sendButton = (Button) findViewById(R.id.button_send);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                validator.validate();
             }
         });
 
@@ -137,10 +160,11 @@ public class MainActivity extends BaseActivity {
             historyLabel.setVisibility(TextView.VISIBLE);
 
             // Show short alert message
-            Toast.makeText(context, "Read from SQLite db", Toast.LENGTH_SHORT).show();
-
             Integer total = db.getTotalHistories();
-            Toast.makeText(context, "Showing " + displayCount.toString() + " out of " + total.toString(), Toast.LENGTH_SHORT).show();
+            String alertMessage = "Read from SQLite db";
+            alertMessage = alertMessage + " showing " + displayCount.toString() + " of " + total.toString();
+            Toast.makeText(context, alertMessage, Toast.LENGTH_SHORT).show();
+
         } else {
             historyValue.setVisibility(TextView.INVISIBLE);
             historyLabel.setVisibility(TextView.INVISIBLE);
@@ -170,11 +194,43 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Implement a ValidationListener
+     * @param errors The list of ValidationError
+     */
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            // Display error messages ;)
+            if (view instanceof EditText) {
+                // ((EditText) view).setError(message);
+                // setError doesn't show error gracefully and
+                // wordwrap to the next line in the EditText because of the error icon
+                // so, just use Toast here
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    /**
+     * Implement success ValidationListener
+     */
+    @Override
+    public void onValidationSucceeded() {
+        // sendMessage() call in XML layout file is moved here
+        // because of onClickListener binding for the button in onCreate
+        sendMessage();
+    }
+
     /** Called when the user clicks the Send button */
-    public void sendMessage(View view) {
+    public void sendMessage() {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
+        String message = fieldEditText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }

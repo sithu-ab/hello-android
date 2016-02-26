@@ -8,9 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.File;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
 
-public class BaseActivity extends AppCompatActivity {
+import java.io.File;
+import java.util.List;
+
+public class BaseActivity extends AppCompatActivity implements Validator.ValidationListener {
     public final static String PACKAGE_NAME = "com.aluto_benli.helloandroid";
     protected static String LOG_TAG = BaseActivity.class.getName();
 
@@ -53,4 +57,14 @@ public class BaseActivity extends AppCompatActivity {
             });
         alertDialog.show();
     }
+
+    /**
+     * Implement success ValidationListener
+     */
+    public void onValidationSucceeded() {}
+
+    /**
+     * Implement failure ValidationListener
+     */
+    public void onValidationFailed(List<ValidationError> errors) {}
 }
