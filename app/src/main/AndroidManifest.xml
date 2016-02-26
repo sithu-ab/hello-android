@@ -2,15 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aluto_benli.helloandroid">
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:installLocation="preferExternal"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:installLocation="preferExternal"
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
@@ -23,9 +22,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.aluto_benli.helloandroid.DisplayMessageActivity"
+            android:name=".DisplayMessageActivity"
             android:label="@string/title_activity_display_message"
-            android:parentActivityName="com.aluto_benli.helloandroid.MainActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.aluto_benli.helloandroid.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
