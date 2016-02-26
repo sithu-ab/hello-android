@@ -32,7 +32,11 @@
         </activity>
         <activity
             android:name=".SettingActivity"
-            android:label="@string/title_activity_setting">
+            android:label="@string/title_activity_setting"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.aluto_benli.helloandroid.MainActivity" />
         </activity>
     </application>
 

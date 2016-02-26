@@ -2,7 +2,6 @@ package com.aluto_benli.helloandroid;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.support.v7.widget.Toolbar;
 
 public class SettingActivity extends BaseActivity {
 
@@ -14,6 +13,8 @@ public class SettingActivity extends BaseActivity {
                 .beginTransaction()
                 .replace(android.R.id.content, new SettingFragment())
                 .commit(); // Note: `R.id.content` without `android` got error
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -24,15 +25,6 @@ public class SettingActivity extends BaseActivity {
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
         }
     }
 }
