@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="storageType">
+        <item name="0">No Storage</item>
+        <item name="1">Shared Preferences</item>
+        <item name="2">Internal Storage</item>
+        <item name="3">External Storage</item>
+        <item name="4">SQLite</item>
+    </string-array>
+    <string-array name="storageTypeValues">
+        <item name="0">0</item>
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+        <item name="4">4</item>
+    </string-array>
+</resources>

@@ -7,5 +7,8 @@
     <string name="preference_file_key">com.aluto_benli.helloandroid.my_preference</string>
     <string name="user_input">user_input</string>
     <string name="input_history">Message History</string>
-    <string name="title_activity_setting">Setting</string>
+    <string name="title_activity_setting">Settings</string>
+    <string name="pref_storage_title">Data Storage Location</string>
+    <string name="pref_storage_summary">Select the kind of storage location you would like to use</string>
+    <string name="pref_default_storage_type">0</string>
 </resources>
