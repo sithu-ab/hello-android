@@ -128,13 +128,12 @@ public class MainActivity extends BaseActivity {
             }
         }
 
+        TextView historyValue = (TextView) findViewById(R.id.input_history_value);
+        TextView historyLabel = (TextView) findViewById(R.id.input_history_label);
         if (!message.isEmpty()) {
             // Display the last input value only when it was previously entered
-            TextView historyValue = (TextView) findViewById(R.id.input_history_value);
             historyValue.setText(message);
             historyValue.setVisibility(TextView.VISIBLE);
-
-            TextView historyLabel = (TextView) findViewById(R.id.input_history_label);
             historyLabel.setVisibility(TextView.VISIBLE);
 
             // Show short alert message
@@ -142,6 +141,10 @@ public class MainActivity extends BaseActivity {
 
             Integer total = db.getTotalHistories();
             Toast.makeText(context, "Showing " + displayCount.toString() + " out of " + total.toString(), Toast.LENGTH_SHORT).show();
+        } else {
+            historyValue.setVisibility(TextView.INVISIBLE);
+            historyLabel.setVisibility(TextView.INVISIBLE);
+            Toast.makeText(context, "No message history", Toast.LENGTH_SHORT).show();
         }
     }
 
