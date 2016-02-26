@@ -6,6 +6,10 @@ Android beginner tutorial from [Google Android Developer Training](http://develo
 
 [Android Studio](http://developer.android.com/sdk/index.html) (1.13GB+ download)
 
+## Extra Third-party Dependencies
+
+- [Android Saripaar](https://github.com/ragunathjawahar/android-saripaar) for form validation
+
 ## Possible Issues during the First App setup and build 
 
 This issues are based on my experience of the very first android app setup and build.
