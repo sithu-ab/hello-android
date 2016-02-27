@@ -1,12 +1,11 @@
 package com.aluto_benli.helloandroid;
 
 import android.content.Context;
-//import android.content.SharedPreferences;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,11 +21,7 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,84 +66,69 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        /*
-        // Method 1: Reading from Shared Preferences and set the last value to EditText
-        SharedPreferences sharedPref = getBaseContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String message = sharedPref.getString(getString(R.string.user_input), "");
-        */
-
-        /*
-        // Method 2: Reading data from the File saved on Internal Storage
         Context context = getBaseContext();
-        String fileName = context.getFilesDir() + File.separator + "data.txt";
         String message  = "";
+        File file;
+        switch (storageType) {
+            // Method 1: Reading from Shared Preferences and set the last value to EditText
+            case "1":
+                SharedPreferences sharedPref = getBaseContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                message = sharedPref.getString(getString(R.string.user_input), "");
+                Toast.makeText(context, "Read from SharedPreferences", Toast.LENGTH_SHORT).show();
+                break;
 
-        File file = new File(fileName);
-        if (file.exists()) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                InputStreamReader streamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(streamReader);
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
+            // Method 2: Reading data from the File saved on Internal Storage
+            case "2":
+                String fileName = context.getFilesDir() + File.separator + "data.txt";
+                file = new File(fileName);
+                if (file.exists()) {
+                    message = readFileOnStorage(file);
+                    Toast.makeText(context, message != null ? "Read from Internal Storage." : "Error while reading file", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "File does not exist.", Toast.LENGTH_SHORT).show();
                 }
-                message = sb.toString();
-                streamReader.close();
-                inputStream.close();
-            } catch (IOException e) {
-                Log.i(LOG_TAG, e.getMessage());
-            }
-        } else {
-            Toast.makeText(context, "File does not exist.", Toast.LENGTH_SHORT).show();
-        }
-        */
+                break;
 
-        /*
-        // Method 3: Reading data from the File saved on External Storage
-        Context context = getBaseContext();
-        String message  = "";
-
-        File file = this.getExternalStorage(context);
-        if (file.exists()) {
-            if (this.isExternalStorageReadable()) {
-                try {
-                    FileInputStream inputStream = new FileInputStream(file);
-                    InputStreamReader streamReader = new InputStreamReader(inputStream);
-                    BufferedReader bufferedReader = new BufferedReader(streamReader);
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        sb.append(line);
+            // Method 3: Reading data from the File saved on External Storage
+            case "3":
+                file = this.getExternalStorage(context);
+                if (file.exists()) {
+                    if (this.isExternalStorageReadable()) {
+                        message = readFileOnStorage(file);
+                        Toast.makeText(context, message != null ? "Read from External Storage." : "Error while reading file", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "External storage not readable.", Toast.LENGTH_SHORT).show();
                     }
-                    message = sb.toString();
-                    streamReader.close();
-                    inputStream.close();
-                } catch (IOException e) {
-                    Log.i(LOG_TAG, e.getMessage());
+                } else {
+                    Toast.makeText(context, "File does not exist.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            // Method 4: Reading data from SQLite database
+            case "4":
+                HelloAndroidDBHelper db = new HelloAndroidDBHelper(context);
+                ArrayList<History> results = db.getHistories(15); // Get latest 15 history records only
+                Integer displayCount = results.size();
+                if (displayCount > 0) {
+                    for (History history : results) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        message = message + dateFormat.format(new Date(history.getCreated())) + " ";
+                        message = message + history.getMessage() + "\n";
+                    }
                 }
 
-            } else {
-                Toast.makeText(context, "External storage not readable.", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(context, "File does not exist.", Toast.LENGTH_SHORT).show();
-        }
-        */
+                // Show short alert message
+                Integer total = db.getTotalHistories();
+                String alertMessage = "Read from SQLite db";
+                alertMessage = alertMessage + " showing " + displayCount.toString() + " of " + total.toString();
+                Toast.makeText(context, alertMessage, Toast.LENGTH_SHORT).show();
+                break;
 
-        // Method 4: Reading data from SQLite database
-        Context context = getBaseContext();
-        String message  = "";
-        HelloAndroidDBHelper db = new HelloAndroidDBHelper(context);
-        ArrayList<History> results = db.getHistories(10); // Get latest 10 history records only
-        Integer displayCount = results.size();
-        if (displayCount > 0) {
-            for (History history : results) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                message = message + dateFormat.format(new Date(history.getCreated())) + " ";
-                message = message + history.getMessage() + "\n";
-            }
+            // No storage
+            default:
+                break;
         }
 
         TextView historyValue = (TextView) findViewById(R.id.input_history_value);
@@ -158,17 +138,12 @@ public class MainActivity extends BaseActivity {
             historyValue.setText(message);
             historyValue.setVisibility(TextView.VISIBLE);
             historyLabel.setVisibility(TextView.VISIBLE);
-
-            // Show short alert message
-            Integer total = db.getTotalHistories();
-            String alertMessage = "Read from SQLite db";
-            alertMessage = alertMessage + " showing " + displayCount.toString() + " of " + total.toString();
-            Toast.makeText(context, alertMessage, Toast.LENGTH_SHORT).show();
-
         } else {
             historyValue.setVisibility(TextView.INVISIBLE);
             historyLabel.setVisibility(TextView.INVISIBLE);
-            Toast.makeText(context, "No message history", Toast.LENGTH_SHORT).show();
+            if (!storageType.equals("0")) {
+                Toast.makeText(context, "No message history", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
