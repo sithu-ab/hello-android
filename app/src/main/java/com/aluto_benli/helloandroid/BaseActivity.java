@@ -3,6 +3,7 @@ package com.aluto_benli.helloandroid;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -126,6 +127,12 @@ public class BaseActivity extends AppCompatActivity implements Validator.Validat
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     /**
