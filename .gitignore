@@ -29,7 +29,10 @@ Thumbs.db
 proguard/
 
 # Android Studio
+.idea/.name
+.idea/gradle.xml
 .idea/libraries
+.idea/misc.xml
 .idea/tasks.xml
 .idea/workspace.xml
 .gradle
